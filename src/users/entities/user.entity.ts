@@ -1,5 +1,7 @@
 import { Accommodation } from 'src/utility/common/accomodation.interface';
+import { Gender } from 'src/utility/common/gender.enum';
 import { Residence } from 'src/utility/common/resident.interface';
+import { sponsorship } from 'src/utility/common/sponsor.enum';
 import { Roles } from 'src/utility/common/user.enum';
 import { Column, CreateDateColumn, Entity, PrimaryColumn, PrimaryGeneratedColumn, Timestamp, UpdateDateColumn } from 'typeorm'
 
@@ -17,14 +19,18 @@ export class UserEntity {
     email:string;
     @Column()
     telephoneN:string;
+    @Column({type:'enum', enum:Gender})
+    gender: Gender
     @Column()
     nationality:string;
     @Column()
-    documentN:string;
+    IDno:string;
+    @Column()
+    guardian_name:string;
     @Column()
     guardian_tel:string;
     @Column('json')
-    residence: Residence;
+    homeAdress: Residence;
     @Column('json')
     accomodation:Accommodation;
     @Column()
@@ -32,7 +38,9 @@ export class UserEntity {
     @Column()
     department:string;
     @Column()
-    sponsorship:string;
+    level:number;
+    @Column({type:'enum', enum:sponsorship})
+    sponsorship:sponsorship;
     @Column({select:false})
     password:string;
     @Column({type:'enum', enum:Roles,array:true,default:[Roles.STUDENT]})

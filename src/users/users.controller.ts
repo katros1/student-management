@@ -1,10 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserRoleDto } from './dto/update-user-role.dto';
 import { UserSignUpDto } from './dto/user-register.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserSignInDto } from './dto/user-login.dto';
+import { AuthorizeRoles } from 'src/utility/decorators/authorize-roles.decorator';
+import { AuthenticationGuard } from 'src/utility/guards/authentication.guard';
+import { AuthorizeGuard } from 'src/utility/guards/authorization.guard';
+import { Roles } from 'src/utility/common/user.enum';
 
 @Controller('users')
 export class UsersController {
@@ -33,12 +37,13 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+    return this.usersService.findOne(id);
   }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  @AuthorizeRoles(Roles.ADMIN, Roles.SUPER_ADMIN, Roles.GUILD_PRES)
+  @UseGuards(AuthenticationGuard, AuthorizeGuard)
+  @Patch('role/:id')
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserRoleDto) {
+    return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')

@@ -7,6 +7,8 @@ export enum Roles {
     MIN_CULTURE = "minister-culture",
     MIN_SECURITY = "minister-security",
     MIN_DISABILIT = "minister-disabilities",
-    STUDENT = "student"
+    STUDENT = "student",
+    SUPER_ADMIN = "super-admin",
+    ADMIN = "admin"
 
 }
